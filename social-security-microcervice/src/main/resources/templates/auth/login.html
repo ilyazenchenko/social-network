@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+</head>
+<body>
+<div style="display: flex;
+justify-content: center; align-items:
+ center; height: 100vh;">
+    <div  style="min-width: 250px;
+     border: 1px solid #ccc; border-radius:
+      15px; padding: 10px;">
+        <div style="font-size: 1.5rem">
+            Вход</div>
+        <br/>
+        <form name="f" method="post"
+              action="/process_login">
+
+            <label for="username">Введите
+                имя пользователя: </label>
+            <input type="text"
+                   name="username" id="username">
+            <div style="height: 6px">
+
+            </div>
+
+            <label for="password">
+                Введите пароль: </label>
+            <input type="password"
+                   id="password" name="password">
+            <div style="height: 6px">
+
+            </div>
+
+            <input type="submit"
+                   value="Войти">
+
+            <div th:if="${param.error}"
+                 style="color: red">
+                Неправильные данные
+            </div>
+        </form>
+        <div style="height: 6px">
+
+        </div>
+        <a href="register">
+            <button>Зарегистрироваться</button>
+        </a>
+    </div>
+</div>
+
+
+</body>
+</html>

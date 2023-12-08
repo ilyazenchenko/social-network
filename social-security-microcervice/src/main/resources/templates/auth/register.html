@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div style="min-width: 250px; border: 1px solid #ccc; border-radius: 15px; padding: 10px;">
+        <div style="font-size: 1.5rem">Регистрация</div>
+        <br/>
+        <form th:method="post" th:action="@{/auth/register}" th:object="${user}">
+
+            <label for="username">Введите имя пользователя: </label>
+            <input type="text" id="username" th:field="*{username}">
+            <div style="color: red" th:if="${#fields.hasErrors()}" th:errors="*{username}"></div>
+            <div style="height: 6px"></div>
+
+            <label for="name">Введите имя: </label>
+            <input type="text" id="name" th:field="*{name}">
+            <div style="color: red" th:if="${#fields.hasErrors()}" th:errors="*{name}"></div>
+            <div style="height: 6px"></div>
+
+            <label for="surname">Введите фамилию: </label>
+            <input type="text" id="surname" th:field="*{surname}">
+            <div style="color: red" th:if="${#fields.hasErrors()}" th:errors="*{surname}"></div>
+            <div style="height: 6px"></div>
+
+            <label for="city">Введите город: </label>
+            <input type="text" id="city" th:field="*{city}">
+            <div style="color: red" th:if="${#fields.hasErrors()}" th:errors="*{city}"></div>
+            <div style="height: 6px"></div>
+
+            <label for="birthDate">Введите дату рождения: </label>
+            <input type="text" id="birthDate" th:field="*{birthDate}">
+            <div style="color: red" th:if="${#fields.hasErrors()}" th:errors="*{birthDate}"></div>
+            <div style="height: 6px"></div>
+
+            <label for="password">Введите пароль: </label>
+            <input type="password" id="password" th:field="*{password}">
+            <div style="color: red" th:if="${#fields.hasErrors()}" th:errors="*{password}"></div>
+            <div style="height: 6px"></div>
+
+            <input type="submit" value="Зарегистрироваться">
+
+        </form>
+        <div style="height: 6px"></div>
+
+        <a href="login">
+            <button>Назад</button>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

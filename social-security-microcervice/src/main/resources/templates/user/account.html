@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Аккаунт</title>
+    <style>
+        a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        .separator{
+            background-color: #afafaf;
+            height: 1px;
+            margin: 0 2px
+        }
+    </style>
+
+</head>
+<body>
+
+<div style="display: flex; justify-content: center;
+align-items: center; height: 100vh;">
+    <div style="min-width: 280px; border: 1px solid #ccc;
+    border-radius: 15px; padding: 10px;">
+
+        <div th:text="${user.getName()+' '+ user.getSurname()}"
+             style="font-size: 1.5rem"></div>
+        <div style="height: 6px"></div>
+        <div th:text="${user.getCity()}" style="font-size: .9rem"></div>
+        <div th:text="${'День рождения: '+user.getBirthDate()}"
+             style="font-size: .9rem"></div>
+
+        <br/>
+        <form th:if="${user.getId()!=authenticatedUser.getId() &&
+        !user.getSubscribersIds().contains(authenticatedUser.getId())}"
+              th:method="post"
+              th:action="@{/{sub}/subscribe/{sub_to}(sub=${authenticatedUser.getId()},
+              sub_to=${user.getId()})}">
+            <input type="submit" value="Подписаться">
+        </form>
+
+        <form th:if="${user.getId()!=authenticatedUser.getId() &&
+        user.getSubscribersIds().contains(authenticatedUser.getId())}"
+              th:method="delete"
+              th:action="@{/{sub}/subscribe/{sub_to}(sub=${authenticatedUser.getId()},
+              sub_to=${user.getId()})}">
+            <input type="submit" value="Отписаться">
+        </form>
+
+        <div th:if="${user.getId()!=authenticatedUser.getId()}">
+            <div style="height: 6px"></div>
+            <a th:href="@{/{id}(id=${authenticatedUser.getId()})}">
+                <button>Домой</button>
+            </a>
+        </div>
+
+        <div th:if="${user.getId()==authenticatedUser.getId()}"
+             style="display: flex; flex-direction: column">
+            <a href="/search">
+                <button>Поиск</button>
+            </a>
+            <div style="height: 6px"></div>
+
+            <a href="/news">
+                <button>Новости</button>
+            </a>
+        </div>
+        <div style="height: 8px"></div>
+
+        <div th:if="${user.getId()==authenticatedUser.getId()}"
+             class="separator"></div>
+
+        <br th:if="${user.getId()==authenticatedUser.getId()}"/>
+
+        <form th:if="${user.getId()==authenticatedUser.getId()}"
+              th:method="post"
+              th:action="@{{id}/posts(id=${user.getId()})}"
+              th:object="${newPost}">
+            <div>Что нового?</div>
+            <div style="height: 6px"></div>
+            <input type="text" th:field="*{text}">
+            <div style="height: 6px"></div>
+            <input type="submit" value="Поделиться">
+        </form>
+        <div style="height: 8px"></div>
+
+        <div class="separator"></div>
+        <br/>
+        <div style="font-size: 1.25rem">Записи</div>
+        <div style="height: 7px"></div>
+        <div th:if="${user.getPosts().isEmpty()}">Записей пока нет :(</div>
+        <div th:each="post: ${user.getPosts()}">
+            <div th:text="${post.getFormattedDate()}" style="font-size: 0.8rem"></div>
+            <div th:text="${post.getText()}"></div>
+
+            <div style="height: 6px"></div>
+
+            <form th:if="${user.getId()==authenticatedUser.getId()}"
+                  th:action="@{{id}/posts/{postId}(id=${user.getId()},
+                  postId=${post.getId()})}" th:method="delete">
+                <input type="submit" value="Удалить" style="font-size: 0.8rem;">
+            </form>
+
+        <div style="height: 8px"></div>
+        </div>
+
+        <div class="separator"></div>
+        <br/>
+
+
+        <div style="display: flex">
+            <div>
+                <div th:if="${!user.getSubscribers().isEmpty()}">Подписчики:</div>
+                <div th:each="subscriber : ${user.getSubscribers()}">
+                    <a th:href="@{/{id}(id=${subscriber.getId()})}"
+                       th:text="${subscriber.getName()+ ' ' +
+                       subscriber.getSurname()}"></a>
+                </div>
+            </div>
+            <div th:if="${!user.getSubscribers().isEmpty()}" style="width: 10%"></div>
+            <div>
+                <div th:if="${!user.getSubscribedTo().isEmpty()}">Подписан на:</div>
+                <div th:each="subscribedTo : ${user.getSubscribedTo()}">
+                    <a th:href="@{/{id}(id=${subscribedTo.getId()})}"
+                       th:text="${subscribedTo.getName()+ ' ' +
+                        subscribedTo.getSurname()}"></a>
+                </div>
+            </div>
+        </div>
+
+        <br/>
+        <a th:if="${user.getId()==authenticatedUser.getId()}"
+           href="/logout">
+            <button>Выйти</button>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

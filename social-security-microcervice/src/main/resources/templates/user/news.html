@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Новости</title>
+    <style>
+        a {
+            text-decoration: none; /* Убираем стандартное подчеркивание */
+            color: #007bff; /* Задаем цвет текста (можете выбрать другой цвет) */
+            transition: color 0.3s ease; /* Анимация изменения цвета при наведении */
+        }
+
+        a:hover {
+            color: #0056b3; /* Новый цвет при наведении */
+        }
+    </style>
+</head>
+<body>
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div style="min-width: 250px; border: 1px solid #ccc; border-radius: 15px; padding: 10px;">
+        <div style="font-size: 1.5rem">Новости</div>
+        <div style="height: 6px"></div>
+        <a th:href="@{/{id}(id=${user.getId()})}">
+            <button>Моя страница</button>
+        </a>
+        <div style="height: 8px"></div>
+        <div th:if="${user.getAllSubToPosts().isEmpty() || user.getAllSubToPosts() == null}">Новостей пока нет :(</div>
+        <div th:each="post: ${user.getAllSubToPosts()}">
+            <a th:href="@{/{id}(id=${post.getUser().getId()})}"
+               th:text="${post.getUser().getName()+ ' ' + post.getUser().getSurname()}"></a>
+
+            <div th:text="${post.getFormattedDate()}" style="font-size: 0.7rem"></div>
+            <div th:text="${post.getText()}"></div>
+            <br/>
+        </div>
+    </div>
+</div>
+</body>
+</html>
