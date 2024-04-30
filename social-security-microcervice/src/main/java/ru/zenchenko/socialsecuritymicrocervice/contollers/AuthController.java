@@ -1,22 +1,19 @@
 package ru.zenchenko.socialsecuritymicrocervice.contollers;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import ru.zenchenko.socialsecuritymicrocervice.dto.LoginDto;
 import ru.zenchenko.socialsecuritymicrocervice.models.User;
 import ru.zenchenko.socialsecuritymicrocervice.security.MyUserDetails;
@@ -24,40 +21,24 @@ import ru.zenchenko.socialsecuritymicrocervice.services.MyUserDetailsService;
 import ru.zenchenko.socialsecuritymicrocervice.services.RegistrationService;
 import ru.zenchenko.socialsecuritymicrocervice.services.UserService;
 
-import java.util.Optional;
+import java.util.Map;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AuthController {
 
     private final RegistrationService registrationService;
 
     private final AuthenticationManager authenticationManager;
 
-    private final HttpServletRequest request;
+    private HttpServletRequest request;
 
     private final MyUserDetailsService myUserDetailsService;
 
     private final UserService userService;
-
-    @GetMapping("/login")
-    public String login() {
-        return "/auth/login";
-    }
-
-    @GetMapping("/register")
-    public String registerPage(@ModelAttribute("user") User user) {
-        return "auth/register";
-    }
-
-    @PostMapping("/register")
-    public String performRegister(@ModelAttribute("user") User user) {
-        registrationService.register(user);
-        return "redirect:/auth/login";
-    }
 
     @PostMapping("/process_login")
     public ResponseEntity<?> processLogin(@RequestBody LoginDto loginDto) {
@@ -85,6 +66,16 @@ public class AuthController {
             return false; // В случае ошибки аутентификации возвращаем false
         }
         return false;
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        try {
+            request.logout();
+        } catch (ServletException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+        return ResponseEntity.ok(Map.of("logout", "success"));
     }
 
 }
