@@ -6,10 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ru.zenchenko.socialsecuritymicrocervice.models.Post;
 import ru.zenchenko.socialsecuritymicrocervice.models.User;
@@ -18,7 +15,7 @@ import ru.zenchenko.socialsecuritymicrocervice.services.UserService;
 
 import java.util.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class UserController {
 
@@ -34,18 +31,19 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String accountPage(@PathVariable int id, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        User user = userService.findById(id);
-        User authenticatedUser = myUserDetails.getUser();
-        if (user != null) {
-            System.out.println("UserController: accountPage: current user:" + user);
-            model.addAttribute("newPost", new Post());
-            model.addAttribute("user", user);
-            model.addAttribute("authenticatedUser", authenticatedUser);
-            return "user/account";
-        } else {
-            model.addAttribute("error", "Ошибка: пользователь не найден");
-            return "redirect:/error";
-        }
+//        User user = userService.findById(id);
+//        User authenticatedUser = myUserDetails.getUser();
+//        if (user != null) {
+//            System.out.println("UserController: accountPage: current user:" + user);
+//            model.addAttribute("newPost", new Post());
+//            model.addAttribute("user", user);
+//            model.addAttribute("authenticatedUser", authenticatedUser);
+//            return "user/account";
+//        } else {
+//            model.addAttribute("error", "Ошибка: пользователь не найден");
+//            return "redirect:/error";
+//        }
+        return "hello";
     }
 
     @GetMapping("/news")
