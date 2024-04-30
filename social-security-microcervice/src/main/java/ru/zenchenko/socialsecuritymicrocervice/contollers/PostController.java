@@ -1,6 +1,10 @@
 package ru.zenchenko.socialsecuritymicrocervice.contollers;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,25 +13,28 @@ import org.springframework.web.client.RestTemplate;
 import ru.zenchenko.socialsecuritymicrocervice.models.Post;
 import ru.zenchenko.socialsecuritymicrocervice.security.MyUserDetails;
 
-@Controller
+import java.util.Map;
+
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("{id}/posts")
 public class PostController {
     private final RestTemplate restTemplate;
 
+    private final Logger logger = LoggerFactory.getLogger(PostController.class);
+
     @PostMapping
-    public String createPost(@PathVariable int id,
-                             @ModelAttribute("newPost") Post post,
-                             Model model) {
+    public ResponseEntity createPost(@PathVariable int id,
+                                     @RequestBody Post post) {
         restTemplate.postForObject("http://localhost:8081/" + id + "/posts",
                 post, String.class);
-        System.out.println("sent creating post:" + post);
-        return "redirect:/" + id;
+        logger.info("sent creating post:" + post);
+        return ResponseEntity.ok(Map.of("result", "created"));
     }
 
     @DeleteMapping("/{postId}")
-    public String deletePost(@PathVariable int id, @PathVariable("postId") int postId) {
+    public ResponseEntity deletePost(@PathVariable int id, @PathVariable("postId") int postId) {
         restTemplate.delete("http://localhost:8081/" + id + "/posts/" + postId);
-        return "redirect:/" + id;
+        return ResponseEntity.ok(Map.of("result", "deleted"));
     }
 }
