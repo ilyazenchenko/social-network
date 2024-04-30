@@ -1,6 +1,8 @@
 package ru.zenchenko.socialsecuritymicrocervice.contollers;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +25,8 @@ public class UserController {
 
     private final RestTemplate restTemplate;
 
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @GetMapping("/hello")
     public String hello(@AuthenticationPrincipal MyUserDetails myUserDetails) {
         User user = myUserDetails.getUser();
@@ -30,46 +34,29 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String accountPage(@PathVariable int id, Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-//        User user = userService.findById(id);
-//        User authenticatedUser = myUserDetails.getUser();
-//        if (user != null) {
-//            System.out.println("UserController: accountPage: current user:" + user);
-//            model.addAttribute("newPost", new Post());
-//            model.addAttribute("user", user);
-//            model.addAttribute("authenticatedUser", authenticatedUser);
-//            return "user/account";
-//        } else {
-//            model.addAttribute("error", "Ошибка: пользователь не найден");
-//            return "redirect:/error";
-//        }
-        return "hello";
+    public ResponseEntity<Map<String, User>> accountPage(@PathVariable int id) {
+        return ResponseEntity.ok(Map.of("user", userService.findById(id)));
     }
 
     @GetMapping("/news")
-    public String newsPage(Model model, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+    public ResponseEntity<Map<String, User>> newsPage(@AuthenticationPrincipal MyUserDetails myUserDetails) {
         User authenticatedUser = myUserDetails.getUser();
         User user = userService.findById(authenticatedUser.getId());
-        System.out.println("UserController: newsPage: current user:" + user);
-        model.addAttribute("user", user);
-        return "user/news";
+        return ResponseEntity.ok(Map.of("user", user));
     }
 
     @GetMapping("/search")
-    public String searchPage(@RequestParam(name = "query", required = false) String query,
+    public ResponseEntity<List<User>> searchPage(@RequestParam(name = "query", required = false) String query,
                              Model model,
                              @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        model.addAttribute("authenticatedUser", myUserDetails.getUser());
         if (query == null) {
-            model.addAttribute("result", new ArrayList<User>());
-            return "user/search";
+            return null;
         }
         ResponseEntity<List> resultObj =
                 restTemplate.getForEntity("http://localhost:8081/search/" + query,
                 List.class);
-        List<User> result = mapToUserList(resultObj.getBody());
-        model.addAttribute("result", result);
-        return "user/search";
+        List<User> resultlist = mapToUserList(resultObj.getBody());
+        return ResponseEntity.ok(resultlist);
     }
 
     private List<User> mapToUserList(List resultObj) {

@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ru.zenchenko.socialsecuritymicrocervice.dto.LoginDto;
 import ru.zenchenko.socialsecuritymicrocervice.models.User;
+import ru.zenchenko.socialsecuritymicrocervice.security.MyUserDetails;
+import ru.zenchenko.socialsecuritymicrocervice.services.MyUserDetailsService;
 import ru.zenchenko.socialsecuritymicrocervice.services.RegistrationService;
+import ru.zenchenko.socialsecuritymicrocervice.services.UserService;
 
 import java.util.Optional;
 
@@ -36,6 +39,9 @@ public class AuthController {
 
     private final HttpServletRequest request;
 
+    private final MyUserDetailsService myUserDetailsService;
+
+    private final UserService userService;
 
     @GetMapping("/login")
     public String login() {
@@ -58,7 +64,8 @@ public class AuthController {
         // Ваш код для проверки логина и пароля
         boolean isAuthenticated = authenticate(loginDto.getLogin(), loginDto.getPassword());
         if (isAuthenticated) {
-            return ResponseEntity.ok().build(); // или возвращайте объект с токеном/информацией пользователя
+            User user = ((MyUserDetails) myUserDetailsService.loadUserByUsername(loginDto.getLogin())).getUser();
+            return ResponseEntity.ok(userService.findById(user.getId()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверные учетные данные");
         }
