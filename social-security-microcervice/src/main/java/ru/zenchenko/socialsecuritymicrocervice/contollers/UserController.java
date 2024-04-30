@@ -45,17 +45,17 @@ public class UserController {
         return ResponseEntity.ok(Map.of("user", user));
     }
 
+
+
     @GetMapping("/search")
-    public ResponseEntity<List<User>> searchPage(@RequestParam(name = "query", required = false) String query,
-                             Model model,
-                             @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        if (query == null) {
+    public ResponseEntity<List<User>> searchPage(@RequestParam(name = "query", required = false) String query) {
+        if (query == null || query.isEmpty()) {
             return null;
         }
         ResponseEntity<List> resultObj =
                 restTemplate.getForEntity("http://localhost:8081/search/" + query,
                 List.class);
-        List<User> resultlist = mapToUserList(resultObj.getBody());
+        List<User> resultlist = mapToUserList(Objects.requireNonNull(resultObj.getBody()));
         return ResponseEntity.ok(resultlist);
     }
 
