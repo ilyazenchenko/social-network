@@ -16,6 +16,12 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000", "http://127.0.0.1:3000")
+                .allowCredentials(true)  // Разрешить отправку учётных данных
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // Можно настроить разрешённые методы
+                .allowedHeaders("*")  // Можно настроить разрешённые заголовки
+                .maxAge(3600);  // Максимальное время (в секундах), на которое результаты предзапроса могут быть кэшированы
     }
+
 }
