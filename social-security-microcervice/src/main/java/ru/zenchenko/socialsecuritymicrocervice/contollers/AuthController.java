@@ -40,6 +40,14 @@ public class AuthController {
 
     private final UserService userService;
 
+    @GetMapping("/login")
+    public ResponseEntity login() {
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+            return ResponseEntity.ok("hello :-)");
+        }
+        return ResponseEntity.status(403).body(Map.of("message", "unauthenticated"));
+    }
+
     @PostMapping("/process_login")
     public ResponseEntity<?> processLogin(@RequestBody LoginDto loginDto) {
         // Ваш код для проверки логина и пароля
@@ -77,5 +85,4 @@ public class AuthController {
         }
         return ResponseEntity.ok(Map.of("logout", "success"));
     }
-
 }
