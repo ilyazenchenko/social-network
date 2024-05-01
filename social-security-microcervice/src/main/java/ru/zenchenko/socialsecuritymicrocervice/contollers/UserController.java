@@ -66,6 +66,15 @@ public class UserController {
         return user.getSubscribedTo().stream().map(User::getId).collect(Collectors.toList());
     }
 
+    @GetMapping("/admin")
+    public ResponseEntity<List<User>> getAllUsers(){
+        ResponseEntity<List> resultObj =
+                restTemplate.getForEntity("http://localhost:8081/all",
+                        List.class);
+        List<User> resultList = mapToUserList(Objects.requireNonNull(resultObj.getBody()));
+        return ResponseEntity.ok(resultList);
+    }
+
     private List<User> mapToUserList(List resultObj) {
         List<User> result = new ArrayList<>();
         for (Object o : resultObj) {
@@ -79,6 +88,10 @@ public class UserController {
         user.setId((Integer) map.get("id"));
         user.setName((String) map.get("name"));
         user.setSurname((String) map.get("surname"));
+        user.setCity((String) map.get("city"));
+        user.setBirthDate((String) map.get("birthDate"));
+        user.setRole((String) map.get("role"));
+        user.setUsername((String) map.get("username"));
         return user;
     }
 }

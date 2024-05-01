@@ -26,6 +26,8 @@ public class User {
 
     private String birthDate;
 
+    private String role;
+
     @Column(name = "city")
     private String city;
 

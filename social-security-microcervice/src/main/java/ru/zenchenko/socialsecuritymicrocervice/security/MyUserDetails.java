@@ -2,10 +2,12 @@ package ru.zenchenko.socialsecuritymicrocervice.security;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.zenchenko.socialsecuritymicrocervice.models.User;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Data
 public class MyUserDetails implements UserDetails {
@@ -13,7 +15,7 @@ public class MyUserDetails implements UserDetails {
     private final User user;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
     }
 
     @Override

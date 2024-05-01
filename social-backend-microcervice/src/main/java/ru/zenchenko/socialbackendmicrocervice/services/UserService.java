@@ -26,6 +26,7 @@ public class UserService {
 
     @Transactional
     public void save(User user) {
+        user.setRole("ROLE_USER");
         userRepository.save(user);
     }
 
@@ -34,6 +35,10 @@ public class UserService {
     }
 
     public List<User> search(String query) {
-        return userRepository.findByNameStartingWithIgnoreCase(query);
+        return userRepository.findByNameStartingWithIgnoreCaseOrSurnameStartingWithIgnoreCase(query, query);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

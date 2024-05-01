@@ -24,6 +24,8 @@ public class User {
 
     private String city;
 
+    private String role;
+
     private List<Post> posts;
 
     private List<User> subscribers = new ArrayList<>();

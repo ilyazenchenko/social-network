@@ -39,4 +39,8 @@ public class UserController {
         return userService.search(query);
     }
 
+    @GetMapping("/all")
+    public List<User> findAll(){
+        return userService.findAll();
+    }
 }
