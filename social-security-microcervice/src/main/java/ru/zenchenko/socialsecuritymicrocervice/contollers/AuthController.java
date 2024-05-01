@@ -59,7 +59,10 @@ public class AuthController {
     }
 
     @PostMapping("/process_login")
-    public ResponseEntity<?> processLogin(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<?> processLogin(@RequestBody LoginDto loginDto, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        if (myUserDetails != null) {
+            return ResponseEntity.ok(userService.findById(myUserDetails.getUser().getId()));
+        }
         logger.info(loginDto.getLogin());
         boolean isAuthenticated = authenticate(loginDto.getLogin(), loginDto.getPassword());
         if (isAuthenticated) {
