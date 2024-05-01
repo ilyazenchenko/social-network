@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,6 @@ public class AuthController {
     private final MyUserDetailsService myUserDetailsService;
 
     private final UserService userService;
-
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @GetMapping("/login")
@@ -94,5 +94,13 @@ public class AuthController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok(Map.of("logout", "success"));
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getAuthenticatedUser(@AuthenticationPrincipal MyUserDetails myUserDetails) {
+        if (myUserDetails == null) {
+            return ResponseEntity.status(403).body(Map.of("message", "unauthorized"));
+        }
+        return ResponseEntity.ok(userService.findById(myUserDetails.getUser().getId()));
     }
 }
