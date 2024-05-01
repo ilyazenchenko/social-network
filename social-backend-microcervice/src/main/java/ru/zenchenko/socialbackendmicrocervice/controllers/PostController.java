@@ -17,8 +17,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public void createPost(@PathVariable int id, @RequestBody Post post){
-        postService.save(post, id);
+    public Post createPost(@PathVariable int id, @RequestBody Post post){
+        return postService.save(post, id);
     }
 
     @DeleteMapping("/{postId}")

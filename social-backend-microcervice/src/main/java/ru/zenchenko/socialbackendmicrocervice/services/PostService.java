@@ -19,10 +19,11 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
-    public void save(Post post, int userId) {
+    public Post save(Post post, int userId) {
         post.setId(postRepository.findMaxId()+1);
         post.setUser(new User(userId));
         post.setTime(new Date());
         postRepository.save(post);
+        return post;
     }
 }

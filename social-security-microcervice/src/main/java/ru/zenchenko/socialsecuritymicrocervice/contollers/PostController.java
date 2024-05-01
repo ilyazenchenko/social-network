@@ -14,6 +14,7 @@ import ru.zenchenko.socialsecuritymicrocervice.models.Post;
 import ru.zenchenko.socialsecuritymicrocervice.security.MyUserDetails;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,10 +27,10 @@ public class PostController {
     @PostMapping
     public ResponseEntity createPost(@PathVariable int id,
                                      @RequestBody Post post) {
-        restTemplate.postForObject("http://localhost:8081/" + id + "/posts",
-                post, String.class);
+        Post response = restTemplate.postForObject("http://localhost:8081/" + id + "/posts",
+                post, Post.class);
         logger.info("sent creating post:" + post);
-        return ResponseEntity.ok(Map.of("result", "created"));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{postId}")
