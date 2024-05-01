@@ -16,6 +16,7 @@ import ru.zenchenko.socialsecuritymicrocervice.security.MyUserDetails;
 import ru.zenchenko.socialsecuritymicrocervice.services.UserService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,6 +58,12 @@ public class UserController {
                 List.class);
         List<User> resultlist = mapToUserList(Objects.requireNonNull(resultObj.getBody()));
         return ResponseEntity.ok(resultlist);
+    }
+
+    @GetMapping("/sub_to_ids")
+    public List<Integer> getSubToIds(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user = userService.findById(myUserDetails.getUser().getId());
+        return user.getSubscribedTo().stream().map(User::getId).collect(Collectors.toList());
     }
 
     private List<User> mapToUserList(List resultObj) {
