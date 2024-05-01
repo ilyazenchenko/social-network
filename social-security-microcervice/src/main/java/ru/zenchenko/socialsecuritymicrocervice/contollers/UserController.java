@@ -39,10 +39,10 @@ public class UserController {
     }
 
     @GetMapping("/news")
-    public ResponseEntity<Map<String, User>> newsPage(@AuthenticationPrincipal MyUserDetails myUserDetails) {
+    public ResponseEntity<Map<String, List<Post>>> newsPage(@AuthenticationPrincipal MyUserDetails myUserDetails) {
         User authenticatedUser = myUserDetails.getUser();
         User user = userService.findById(authenticatedUser.getId());
-        return ResponseEntity.ok(Map.of("user", user));
+        return ResponseEntity.ok(Map.of("news", user.getAllSubToPosts()));
     }
 
 

@@ -45,8 +45,8 @@ public class AuthController {
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @GetMapping("/login")
-    public ResponseEntity login() {
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+    public ResponseEntity login(@AuthenticationPrincipal MyUserDetails myUserDetails) {
+        if (myUserDetails != null){
             return ResponseEntity.ok("hello :-)");
         }
         return ResponseEntity.status(403).body(Map.of("message", "unauthenticated"));
