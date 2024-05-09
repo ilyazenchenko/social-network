@@ -20,7 +20,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = restTemplate.getForEntity("http://localhost:8081/username/" + username,
+        User user = restTemplate.getForEntity("http://backend:8081/username/" + username,
                 User.class).getBody();
 
         if (Objects.requireNonNull(user).getUsername() == null)

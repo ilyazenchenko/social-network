@@ -18,11 +18,12 @@ public class ServiceFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (("127.0.0.1".equals(request.getRemoteHost()))) {
-            filterChain.doFilter(request, response); // Пропускаем запрос
-        } else {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("Access denied. Only requests from 127.0.0.1 are allowed.");
-        }
+        filterChain.doFilter(request, response);
+//        if (("127.0.0.1".equals(request.getRemoteHost()))) {
+//            filterChain.doFilter(request, response); // Пропускаем запрос
+//        } else {
+//            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//            response.getWriter().write("Access denied. Only requests from 127.0.0.1 are allowed.");
+//        }
     }
 }

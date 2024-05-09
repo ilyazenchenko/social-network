@@ -54,7 +54,7 @@ public class UserController {
             return null;
         }
         ResponseEntity<List> resultObj =
-                restTemplate.getForEntity("http://localhost:8081/search/" + query,
+                restTemplate.getForEntity("http://backend:8081/search/" + query,
                 List.class);
         List<User> resultlist = mapToUserList(Objects.requireNonNull(resultObj.getBody()));
         return ResponseEntity.ok(resultlist);
@@ -69,7 +69,7 @@ public class UserController {
     @GetMapping("/admin")
     public ResponseEntity<List<User>> getAllUsers(){
         ResponseEntity<List> resultObj =
-                restTemplate.getForEntity("http://localhost:8081/all",
+                restTemplate.getForEntity("http://backend:8081/all",
                         List.class);
         List<User> resultList = mapToUserList(Objects.requireNonNull(resultObj.getBody()));
         return ResponseEntity.ok(resultList);

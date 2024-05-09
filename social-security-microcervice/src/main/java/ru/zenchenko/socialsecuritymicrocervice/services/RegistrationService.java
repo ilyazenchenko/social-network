@@ -18,7 +18,7 @@ public class RegistrationService {
 
     public void register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        HashMap hashMap = restTemplate.postForObject("http://localhost:8081",user, HashMap.class);
+        HashMap hashMap = restTemplate.postForObject("http://backend:8081",user, HashMap.class);
         System.out.println(hashMap);
     }
 

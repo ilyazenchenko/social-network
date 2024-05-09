@@ -24,7 +24,7 @@ public class SubscriberController {
 
     @PostMapping("/{sub_to}")
     public ResponseEntity<Map> subscribe(@PathVariable int sub, @PathVariable("sub_to") int subTo) {
-        Map response = restTemplate.postForObject("http://localhost:8081/" + sub + "/subscribe/" + subTo,
+        Map response = restTemplate.postForObject("http://backend:8081/" + sub + "/subscribe/" + subTo,
                 null, Map.class);
         Map result = (HashMap) response;
         result.put("from", sub);
@@ -34,7 +34,7 @@ public class SubscriberController {
 
     @DeleteMapping("/{sub_to}")
     public ResponseEntity unsubscribe(@PathVariable int sub, @PathVariable("sub_to") int subTo) {
-        restTemplate.delete("http://localhost:8081/" + sub + "/subscribe/" + subTo);
+        restTemplate.delete("http://backend:8081/" + sub + "/subscribe/" + subTo);
         logger.info("sub deleted");
         return ResponseEntity.ok(Map.of(
                 "sub", "deleted",

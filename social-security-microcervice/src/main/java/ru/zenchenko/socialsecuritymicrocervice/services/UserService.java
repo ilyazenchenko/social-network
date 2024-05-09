@@ -33,7 +33,7 @@ public class UserService {
         HashMap<String, String> uriVariables = new HashMap<>();
         uriVariables.put("id", String.valueOf(id));
         ResponseEntity<User> responseEntity = restTemplate.getForEntity
-                ("http://localhost:8081/{id}",
+                ("http://backend:8081/{id}",
                         User.class, uriVariables);
         User user = responseEntity.getBody();
         System.out.println("UserService: getUserFromBackendService: retrieved user: " + responseEntity.getBody());
@@ -47,7 +47,7 @@ public class UserService {
 
     private void setSubscribedTo(int id, User user) {
         ResponseEntity<List> subToListEntity =
-                restTemplate.getForEntity("http://localhost:8081/" + id + "/subscribe/sub_to", List.class);
+                restTemplate.getForEntity("http://backend:8081/" + id + "/subscribe/sub_to", List.class);
         System.out.printf("UserService: setSubscribedTo (id=%d): retrieved subscribed to: "
                 + subToListEntity.getBody() + "%n", id);
         List<Map> subsToListMap = subToListEntity.getBody();
@@ -64,7 +64,7 @@ public class UserService {
 
     private void setSubscribers(int id, User user) {
         ResponseEntity<List> subsListEntity =
-                restTemplate.getForEntity("http://localhost:8081/" + id + "/subscribe/subs", List.class);
+                restTemplate.getForEntity("http://backend:8081/" + id + "/subscribe/subs", List.class);
         System.out.printf("UserService: setSubscribers (id=%d): retrieved subscribers: " + subsListEntity.getBody() + "%n", id);
         List<Map> subsListMap = subsListEntity.getBody();
 

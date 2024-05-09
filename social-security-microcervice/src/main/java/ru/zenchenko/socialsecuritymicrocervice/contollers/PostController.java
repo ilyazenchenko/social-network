@@ -27,7 +27,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity createPost(@PathVariable int id,
                                      @RequestBody Post post) {
-        Post response = restTemplate.postForObject("http://localhost:8081/" + id + "/posts",
+        Post response = restTemplate.postForObject("http://backend:8081/" + id + "/posts",
                 post, Post.class);
         logger.info("sent creating post:" + post);
         return ResponseEntity.ok(response);
@@ -35,7 +35,7 @@ public class PostController {
 
     @DeleteMapping("/{postId}")
     public ResponseEntity deletePost(@PathVariable int id, @PathVariable("postId") int postId) {
-        restTemplate.delete("http://localhost:8081/" + id + "/posts/" + postId);
+        restTemplate.delete("http://backend:8081/" + id + "/posts/" + postId);
         return ResponseEntity.ok(Map.of("result", "deleted"));
     }
 }
